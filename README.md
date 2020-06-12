@@ -1,5 +1,7 @@
 # watchdog script
 I have a cluttered downloads folder. Too lazy to clean it.
-But when I'm in my german course I need to download files,
-And take lots multiple screenshots.
-This watchdog script take these files out.
+But when I'm in my german course I need to take multiple screenshots.
+This watchdog script move these photos to new folder created in Desktop.
+
+--TODO--
+write follow-up script to upload this folder to my google cloud drive
