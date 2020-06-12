@@ -6,28 +6,38 @@ OR
 fs.inotify.max_user_watches=100000
 """
 import time
+import datetime
+from datetime import date
+from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from shutil import copyfile
 
 
-class Watcher:
+def createFolder() -> Path:
+    today = date.today()
+    dir = Path("/home/ehab/Desktop")/f"{today}"
+    dir.mkdir(exist_ok=True)
+    return dir
+
+def moveFile():
+    #copyfile(event.on_any_event(), "/home/ehab/Desktop")
+    pass
+
+def run():
     DIRECTORY_TO_WATCH = "/home/ehab/Downloads"
+    observer = Observer()
+    event_handler = Handler()
+    observer.schedule(event_handler, DIRECTORY_TO_WATCH, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(5)
+    except:
+        observer.stop()
+        print ("error!")
 
-    def __init__(self):
-        self.observer = Observer()
-
-    def run(self):
-        event_handler = Handler()
-        self.observer.schedule(event_handler, self.DIRECTORY_TO_WATCH, recursive=True)
-        self.observer.start()
-        try:
-            while True:
-                time.sleep(5)
-        except:
-            self.observer.stop()
-            print ("Error")
-
-        self.observer.join()
+    observer.join()
 
 
 class Handler(FileSystemEventHandler):
@@ -38,10 +48,82 @@ class Handler(FileSystemEventHandler):
             return None
 
         elif event.event_type == 'created':
-            print ("Received created event - %s." % event.src_path)
-            #TODO: Print out timestamps logs
-            #TODO: Copy files to /home/ehab/Desktop/goethe
+            current_time = datetime.datetime.now()  
+            print ("Received created event -- {} -- {}." .format(current_time, event.src_path))
+            src = event.src_path
+            return str(src)
+
+def test():
+    h=Handler()
+    #src=h.on_any_event()
+    return None """
+Solve for "User limit of inotify watches reached" error
+cat /proc/sys/fs/inotify/max_user_watches
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+OR
+fs.inotify.max_user_watches=100000
+"""
+import time
+import datetime
+from datetime import date
+from pathlib import Path
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from shutil import copyfile
+
+
+def createFolder() -> Path:
+    today = date.today()
+    dir = Path("/home/ehab/Desktop")/f"{today}"
+    dir.mkdir(exist_ok=True)
+    return dir
+
+def moveFile():
+    #copyfile(event.on_any_event(), "/home/ehab/Desktop")
+    pass
+
+def run():
+    DIRECTORY_TO_WATCH = "/home/ehab/Downloads"
+    observer = Observer()
+    event_handler = Handler()
+    observer.schedule(event_handler, DIRECTORY_TO_WATCH, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(5)
+    except:
+        observer.stop()
+        print ("error!")
+
+    observer.join()
+
+
+class Handler(FileSystemEventHandler):
+
+    @staticmethod
+    def on_any_event(event):
+        if event.is_directory:
+            return None
+
+        elif event.event_type == 'created':
+            current_time = datetime.datetime.now()  
+            print ("Received created event -- {} -- {}." .format(current_time, event.src_path))
+            src = event.src_path
+            return str(src)
+
+def test():
+    h=Handler()
+    #src=h.on_any_event()
+    return None 
+
+            
 
 if __name__ == '__main__':
-    w=Watcher()
-    w.run()
+    createFolder()
+    run()
+
+            
+
+if __name__ == '__main__':
+    createFolder()
+    run()
