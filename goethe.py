@@ -13,15 +13,10 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from shutil import copyfile
 
-def createFolder() -> Path:
-    today = date.today()
-    dir = Path("/home/ehab/Desktop")/f"{today}"
-    dir.mkdir(exist_ok=True)
-    return dir
-
-def moveFile():
-    #copyfile(event.on_any_event(), "/home/ehab/Desktop")
-    pass
+today = date.today()
+dst = Path("/home/ehab/Desktop")/f"{today}"
+dst.mkdir(exist_ok=True)
+dst =str(dst)
 
 def run():
     DIRECTORY_TO_WATCH = "/home/ehab/Downloads"
@@ -40,21 +35,23 @@ def run():
 class Handler(FileSystemEventHandler):
     @staticmethod
     def on_any_event(event):
+        global dst
         if event.is_directory:
             return None
         elif event.event_type == 'created':
             current_time = datetime.datetime.now()  
             print ("Received created event -- {} -- {}." .format(current_time, event.src_path))
             src = str(event.src_path)
-            return src
-
-def test():
-    h=Handler()
-    return None 
-
+            dstFileName = src[21:]
+            dstFileName = "/" + dstFileName
+            dstFileName = str(dstFileName)
+            finaldst = dst + dstFileName
+            print("**************")
+            print(src)
+            print(finaldst)
+            print("**************")
+            copyfile(src, finaldst)
 
 
 if __name__ == '__main__':
-    createFolder()
     run()
-    test()
