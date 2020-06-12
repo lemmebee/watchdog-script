@@ -1,6 +1,6 @@
 # watchdog script
 I have a cluttered downloads folder. Too lazy to clean it.
-But when I'm in my online german course I need to take multiple screenshots.
+But when I'm in my german course I need to take multiple screenshots.
 #### Purpose
 Monitor directory for changes and Move these photos created to new folder in Desktop
 #### TODO
