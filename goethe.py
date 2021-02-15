@@ -9,15 +9,15 @@ fs.inotify.max_user_watches=100000
 import datetime
 from datetime import date
 import time
-from pathlib import Path
+import os 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import shutil
 
 
 today = date.today()
-newFolder = Path("/home/ehab/Desktop")/f"{today}"
-newFolder.mkdir(exist_ok=True)
+newFolder = os.path.join("/home/ehab/Desktop/", str(today)) 
+os.mkdir(newFolder) 
 newFolder =str(newFolder)
 
 class Watcher:
